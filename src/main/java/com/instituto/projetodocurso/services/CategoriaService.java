@@ -3,10 +3,12 @@ package com.instituto.projetodocurso.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.instituto.projetodocurso.domain.Categoria;
 import com.instituto.projetodocurso.repositories.CategoriaRepository;
+import com.instituto.projetodocurso.services.exceptions.DataIntegrityException;
 import com.instituto.projetodocurso.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -30,6 +32,16 @@ public class CategoriaService {
 	public Categoria atualizar (Categoria cat) {
 		buscar(cat.getId());
 		return repositorio.save(cat);
+	}
+	
+	public void deletar (Integer id) {
+		buscar(id);
+		try {
+			repositorio.deleteById(id);
+		}catch(DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível deletar objetos com associação");
+		}
+		
 	}
 	
 }
