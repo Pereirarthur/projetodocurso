@@ -27,4 +27,9 @@ public class CategoriaService {
 				+ "id = "+id+", tipo = " + Categoria.class.getName()));
 	}
 	
+	public Categoria atualizar (Categoria cat) {
+		buscar(cat.getId());
+		return repositorio.save(cat);
+	}
+	
 }
