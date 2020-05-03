@@ -39,7 +39,7 @@ public class CategoriaResource {
 	
 	@RequestMapping(value = "/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Categoria> buscar(@PathVariable Integer id) {
-		Categoria obj = servico.buscar(id);
+		Categoria obj = servico.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
@@ -47,21 +47,21 @@ public class CategoriaResource {
 	public ResponseEntity<Void> atualizar(@Valid  @RequestBody CategoriaDTO objDTO, @PathVariable Integer id){
 		Categoria obj = servico.dtoParaObjeto(objDTO);
 		obj.setId(id);
-		obj=servico.atualizar(obj);
+		obj=servico.update(obj);
 		return ResponseEntity.noContent().build();
 		
 	}
 	
 	@RequestMapping(value = "/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-		servico.deletar(id);
+		servico.delete(id);
 		return ResponseEntity.noContent().build();
 		
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> listar() {
-		List<Categoria> lista = servico.listar();
+		List<Categoria> lista = servico.findAll();
 		List<CategoriaDTO> listaDTO = lista.stream().
 				map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listaDTO);
@@ -73,7 +73,7 @@ public class CategoriaResource {
 			@RequestParam(value = "linesPerPage",defaultValue = "24")Integer linesPerPage, 
 			@RequestParam(value = "orderby",defaultValue = "nome")String orderby, 
 			@RequestParam(value = "direction",defaultValue = "ASC")String direction) {
-		Page<Categoria> lista = servico.buscarEmPagina(page, linesPerPage, orderby, direction);
+		Page<Categoria> lista = servico.findPage(page, linesPerPage, orderby, direction);
 		Page<CategoriaDTO> listaDTO = lista.map(obj -> new CategoriaDTO(obj));
 		return ResponseEntity.ok().body(listaDTO);
 	}

@@ -28,19 +28,19 @@ public class CategoriaService {
 		return repositorio.save(obj);
 	}
 	
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		Optional<Categoria> cat = repositorio.findById(id);
 		return cat.orElseThrow(() -> new ObjectNotFoundException("Objeto Não Encontrado! "
 				+ "id = "+id+", tipo = " + Categoria.class.getName()));
 	}
 	
-	public Categoria atualizar (Categoria cat) {
-		buscar(cat.getId());
+	public Categoria update (Categoria cat) {
+		find(cat.getId());
 		return repositorio.save(cat);
 	}
 	
-	public void deletar (Integer id) {
-		buscar(id);
+	public void delete (Integer id) {
+		find(id);
 		try {
 			repositorio.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
@@ -49,11 +49,11 @@ public class CategoriaService {
 	
 	}
 	
-	public List<Categoria> listar(){
+	public List<Categoria> findAll(){
 		return repositorio.findAll();
 	}
 		
-	public Page<Categoria> buscarEmPagina (Integer page, Integer linesPerPage, String orderby, String direction){
+	public Page<Categoria> findPage (Integer page, Integer linesPerPage, String orderby, String direction){
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderby);
 		return repositorio.findAll(pageRequest);
 	}
